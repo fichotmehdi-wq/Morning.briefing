@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gucci G Morning Briefing</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F5F5F3;--white:#fff;--black:#111;--gray:#888;--border:#E0E0DD;--dark:#333;
+  --blue:#2176AE;--orange:#E07A30;--green:#2E9E6A;--purple:#8B5CF6;
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'Inter',system-ui,sans-serif;
+  --r:8px;
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--black)}
+
+/* ─── FORM ─────────────────────────────────────────── */
+#formView{max-width:720px;margin:0 auto;padding:24px 16px 60px}
+.eyebrow{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--dark);font-weight:600;margin-bottom:4px}
+.page-title{font-family:var(--serif);font-size:26px;font-weight:700;margin-bottom:4px}
+.page-sub{font-size:12px;color:var(--gray);margin-bottom:22px;line-height:1.5}
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);margin-bottom:10px;padding:16px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
+.f label{display:block;font-size:9px;letter-spacing:2px;color:var(--gray);text-transform:uppercase;margin-bottom:4px;font-weight:500}
+.f input,.f textarea{width:100%;font-size:15px;color:var(--black);background:transparent;border:none;border-bottom:1.5px solid var(--border);padding:6px 0;outline:none;font-family:var(--sans);resize:none;-webkit-appearance:none}
+.f input:focus,.f textarea:focus{border-bottom-color:var(--black)}
+.kgrid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:10px}
+.kcard{background:var(--white);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.ktop{height:4px}
+.kbody{padding:14px}
+.ktitle{font-size:9px;letter-spacing:2px;color:var(--gray);text-transform:uppercase;margin-bottom:10px}
+.ksub{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.slabel{font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-bottom:8px}
+.divider{height:1px;background:var(--border);margin:16px 0 12px}
+.gen-btn{
+  display:block;width:100%;padding:18px;
+  background:var(--black);color:var(--white);
+  font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  border:none;cursor:pointer;font-family:var(--sans);
+  border-radius:var(--r);margin-top:4px;
+  -webkit-tap-highlight-color:transparent;
+}
+.foot-note{text-align:center;margin-top:10px;font-size:11px;color:var(--gray);line-height:1.5}
+
+/* ─── REPORT ────────────────────────────────────────── */
+#reportView{display:none;background:var(--bg)}
+.rbar{
+  background:var(--black);padding:12px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
+.rbar-title{color:#888;font-size:10px;letter-spacing:1px;text-transform:uppercase}
+.rbar-btns{display:flex;gap:8px}
+.rbtn{
+  padding:9px 16px;font-size:10px;font-weight:600;letter-spacing:1px;
+  text-transform:uppercase;border:none;cursor:pointer;
+  font-family:var(--sans);border-radius:6px;
+  -webkit-tap-highlight-color:transparent;
+}
+.rbtn-back{background:#222;color:#aaa}
+.rbtn-share{background:var(--white);color:var(--black)}
+.rpages{padding:12px;display:flex;flex-direction:column;gap:12px}
+
+/* ─── REPORT CARDS ──────────────────────────────────── */
+.r-section{background:var(--white);border-radius:var(--r);border:1px solid var(--border);overflow:hidden}
+.r-section-hdr{border-top:3px solid var(--dark);padding:12px 16px;border-bottom:1px solid var(--border)}
+.r-eyebrow{font-size:7px;letter-spacing:3px;text-transform:uppercase;color:var(--dark);margin-bottom:3px}
+.r-date{font-family:var(--serif);font-size:18px;font-weight:700}
+.r-mgr{font-size:11px;color:var(--gray);font-style:italic}
+
+/* KPI cards — vertical stack on mobile */
+.kpi-row{display:flex;flex-direction:column;gap:0}
+.kpi-item{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px}
+.kpi-item:last-child{border-bottom:none}
+.kpi-color{width:4px;height:48px;border-radius:2px;flex-shrink:0}
+.kpi-info{flex:1}
+.kpi-lbl{font-size:8px;letter-spacing:2px;color:var(--gray);text-transform:uppercase;margin-bottom:3px}
+.kpi-val{font-family:var(--serif);font-size:26px;font-weight:700;line-height:1}
+.kpi-right{text-align:right;min-width:120px}
+.kpi-pct{font-size:13px;font-weight:700;margin-bottom:3px}
+.kpi-exp{font-size:9px;color:var(--gray)}
+.kpi-badge{font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:4px;display:inline-block;margin-top:4px}
+.kpi-gap{font-size:10px;color:var(--gray);margin-top:2px}
+
+/* Overview grid */
+.ov-grid{display:flex;flex-direction:column}
+.ov-row{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:3px}
+.ov-row:last-child{border-bottom:none}
+.ov-lbl{font-size:8px;letter-spacing:2px;color:var(--gray);text-transform:uppercase}
+.ov-val{font-size:12px;color:var(--black);line-height:1.7}
+.ov-val .num{color:#aaa;font-weight:600;margin-right:4px;font-size:11px}
+
+/* Daily targets */
+.dt-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--border)}
+.dt-item{padding:12px 16px;border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
+.dt-item:nth-child(2n){border-right:none}
+.dt-item:nth-last-child(-n+2){border-bottom:none}
+.dt-bar{height:3px;border-radius:2px;margin-bottom:8px}
+.dt-lbl{font-size:7.5px;letter-spacing:2px;color:var(--gray);text-transform:uppercase;margin-bottom:4px}
+.dt-val{font-family:var(--serif);font-size:22px;font-weight:700;line-height:1;margin-bottom:3px}
+.dt-sub{font-size:9px;color:var(--gray);margin-bottom:2px}
+.dt-note{font-size:8px;color:var(--gray);font-style:italic}
+
+/* ─── SHARE MODAL ───────────────────────────────────── */
+#shareModal{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);
+  z-index:200;align-items:flex-end;justify-content:center;
+}
+#shareModal.open{display:flex}
+.share-sheet{
+  background:var(--white);border-radius:16px 16px 0 0;
+  padding:24px 20px 40px;width:100%;max-width:480px;
+}
+.share-title{font-size:14px;font-weight:700;margin-bottom:4px}
+.share-sub{font-size:12px;color:var(--gray);margin-bottom:20px}
+.share-options{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.share-opt{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.share-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px}
+.share-opt span{font-size:10px;color:var(--gray);text-align:center}
+.share-cancel{width:100%;padding:14px;background:var(--bg);border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--sans)}
+
+@media(min-width:600px){
+  .kgrid{grid-template-columns:repeat(3,1fr)}
+  .kpi-row{flex-direction:row}
+  .kpi-item{flex-direction:column;align-items:flex-start;border-right:1px solid var(--border);border-bottom:none;flex:1}
+  .kpi-item:last-child{border-right:none}
+  .kpi-color{width:100%;height:4px;margin-bottom:8px}
+  .kpi-right{text-align:left;min-width:auto;margin-top:6px}
+  .dt-grid{grid-template-columns:repeat(4,1fr)}
+  .dt-item:nth-child(2n){border-right:1px solid var(--border)}
+  .dt-item:nth-last-child(-n+2){border-bottom:1px solid var(--border)}
+  .dt-item:nth-child(4n){border-right:none}
+  .dt-item:nth-last-child(-n+4){border-bottom:none}
+  .g4{grid-template-columns:repeat(4,1fr)}
+}
+</style>
+</head>
+<body>
+
+
+
+
+<!-- ═══ FORM ═══════════════════════════════════════════ -->
+<div id="formView">
+  <div style="margin-bottom:20px">
+    <div class="eyebrow">Gucci — G Morning Briefing</div>
+    <h1 class="page-title">Daily Report Generator</h1>
+    <p class="page-sub">Fill in the numbers and tap Generate. Share the report directly via WhatsApp, email, or save as PDF.</p>
+  </div>
+
+  <div class="card"><div class="g4">
+    <div class="f"><label>Store</label><input id="storeName" value="Gucci Rodeo Drive"></div>
+    <div class="f"><label>Period</label><input id="period" value="March 2026"></div>
+    <div class="f"><label>Days Remaining</label><input type="number" id="daysLeft" value="6" oninput="upd()" inputmode="numeric"></div>
+    <div class="f"><label>Days Elapsed</label><input type="number" id="elapsed" value="25" oninput="upd()" inputmode="numeric"></div>
+  </div></div>
+
+  <div class="kgrid">
+    <div class="kcard"><div class="ktop" style="background:#2176AE"></div><div class="kbody">
+      <div class="ktitle">Total Sales</div><div class="ksub">
+        <div class="f"><label>Actual ($)</label><input type="number" id="sa" value="2130000" oninput="upd()" inputmode="decimal"></div>
+        <div class="f"><label>Target ($)</label><input type="number" id="st" value="2700000" oninput="upd()" inputmode="decimal"></div>
+      </div></div></div>
+    <div class="kcard"><div class="ktop" style="background:#E07A30"></div><div class="kbody">
+      <div class="ktitle">Avg Ticket</div><div class="ksub">
+        <div class="f"><label>Actual ($)</label><input type="number" id="ta" value="1923" oninput="upd()" inputmode="decimal"></div>
+        <div class="f"><label>Target ($)</label><input type="number" id="tt" value="2251" oninput="upd()" inputmode="decimal"></div>
+      </div></div></div>
+    <div class="kcard"><div class="ktop" style="background:#2E9E6A"></div><div class="kbody">
+      <div class="ktitle">Net Ticket</div><div class="ksub">
+        <div class="f"><label>Actual</label><input type="number" id="na" value="1106" oninput="upd()" inputmode="numeric"></div>
+        <div class="f"><label>Target</label><input type="number" id="nt" value="1199" oninput="upd()" inputmode="numeric"></div>
+      </div></div></div>
+  </div>
+
+  <div class="card"><div class="g3">
+    <div class="f"><label>CAs on Floor</label><input type="number" id="cas" value="5" oninput="upd()" inputmode="numeric"></div>
+    <div class="f"><label>Today's Date</label><input type="date" id="todayDate"></div>
+    <div class="f"><label>Manager</label><input id="manager" placeholder="Mehdi Fichot"></div>
+  </div></div>
+
+
+  <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:10px">
+    <div class="slabel">Live Preview</div>
+    <div id="prevCards" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"></div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="slabel">G Morning Briefing Content</div>
+
+  <div class="card">
+    <div class="f" style="margin-bottom:14px">
+      <label>Yesterday's Sales ($)</label>
+      <input type="number" id="salesResult" placeholder="e.g. 142000" inputmode="decimal">
+    </div>
+    <div class="f" style="margin-bottom:14px">
+      <label>Top Department</label>
+      <input id="topDept" placeholder="e.g. Handbags 38% — push RTW">
+    </div>
+    <div class="g2" style="margin-bottom:14px">
+      <div class="f">
+        <label>Top 3 Performers (numbers auto $)</label>
+        <textarea id="topPerformers" rows="3" placeholder="Sophie — 28000&#10;Marc — 22500&#10;Lena — 19800"></textarea>
+      </div>
+      <div class="f">
+        <label>Focus Today (one per line)</label>
+        <textarea id="todayFocus" rows="3" placeholder="Push GG Marmont cross-sell&#10;Client outreach — 5 calls min"></textarea>
+      </div>
+    </div>
+    <div class="f" style="margin-bottom:14px">
+      <label>Top 3 Appointments Yesterday (numbers auto $)</label>
+      <textarea id="appts" rows="3" placeholder="Mrs. Chen — Dionysus — 8500&#10;John D. — Bamboo bag — 4200&#10;Walk-in — Shoes + RTW — 3100"></textarea>
+    </div>
+    <div class="f" style="margin-bottom:14px">
+      <label>Guccipedia Topic</label>
+      <input id="training" placeholder="e.g. Flora Gorgeous Gardenia — fragrance">
+    </div>
+    <div class="f">
+      <label>Luce News</label>
+      <input id="luceNews" placeholder="e.g. New Bamboo collection — in store today">
+    </div>
+  </div>
+
+  <button class="gen-btn" onclick="generate()">Generate Report →</button>
+  <p class="foot-note">After generating — tap Share to send via WhatsApp or Email</p>
+</div>
+
+<!-- ═══ REPORT ══════════════════════════════════════════ -->
+<div id="reportView">
+  <div class="rbar">
+    <span class="rbar-title">G Morning Briefing</span>
+    <div class="rbar-btns">
+      <button class="rbtn rbtn-back" onclick="showForm()">← Edit</button>
+      <button class="rbtn rbtn-share" onclick="openShare()">Share ↑</button>
+    </div>
+  </div>
+  <div class="rpages" id="rpages"></div>
+</div>
+
+<!-- ═══ SHARE SHEET ═════════════════════════════════════ -->
+<div id="shareModal" onclick="closeShare(event)">
+  <div class="share-sheet">
+    <div class="share-title">Share G Morning Briefing</div>
+    <div class="share-sub">Choose how to share this report</div>
+    <div class="share-options">
+      <div class="share-opt" onclick="shareWA()">
+        <div class="share-icon" style="background:#25D366">💬</div>
+        <span>WhatsApp</span>
+      </div>
+      <div class="share-opt" onclick="shareEmail()">
+        <div class="share-icon" style="background:#4A90D9">✉️</div>
+        <span>Email</span>
+      </div>
+      <div class="share-opt" onclick="sharePDF()">
+        <div class="share-icon" style="background:#FF4444">📄</div>
+        <span>Save PDF</span>
+      </div>
+      <div class="share-opt" onclick="shareNative()">
+        <div class="share-icon" style="background:#555">⬆️</div>
+        <span>More</span>
+      </div>
+    </div>
+    <button class="share-cancel" onclick="closeShare()">Cancel</button>
+  </div>
+</div>
+
+<script>
+// ── init ──────────────────────────────────────────────
+(function(){
+  var d=new Date();
+  document.getElementById("todayDate").value=d.toISOString().split("T")[0];
+  upd();
+})();
+
+function v(id){var el=document.getElementById(id);return el?el.value:"";}
+function n(id){return parseFloat(v(id))||0;}
+
+function money(val){
+  if(val>=1000000) return "$"+(val/1000000).toFixed(2)+"M";
+  if(val>=1000) return "$"+Math.round(val).toLocaleString();
+  return "$"+Math.round(val);
+}
+function pct(a,t){return t?Math.min(100,Math.round(a/t*100)):0;}
+
+function getStatus(p,days,elapsed){
+  var total=(elapsed||25)+(days||6);
+  var exp=Math.round((elapsed||25)/total*100);
+  var diff=p-exp;
+  if(p>=100) return{txt:"TARGET REACHED",bg:"#E8F7EF",col:"#1A7A4E",exp:exp};
+  if(diff>=5)  return{txt:"AHEAD OF PACE", bg:"#E8F7EF",col:"#1A7A4E",exp:exp};
+  if(diff>=-3) return{txt:"ON PACE",       bg:"#EBF5FB",col:"#1A5276",exp:exp};
+  if(diff>=-8) return{txt:"SLIGHTLY BEHIND",bg:"#FEF3E8",col:"#B35B10",exp:exp};
+  if(diff>=-15)return{txt:"BEHIND PACE",   bg:"#FDEBD0",col:"#A04000",exp:exp};
+  if(diff>=-25)return{txt:"PUSH HARD",     bg:"#FEE8E8",col:"#CC3333",exp:exp};
+  return           {txt:"CRITICAL",        bg:"#FADBD8",col:"#922B21",exp:exp};
+}
+
+function fmtDate(iso){
+  if(!iso) return "Today";
+  var d=new Date(iso+"T12:00:00");
+  return ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][d.getDay()]+" "+d.getDate()+" "+
+    ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][d.getMonth()]+" "+d.getFullYear();
+}
+function fmtDateLong(iso){
+  if(!iso) return "Today";
+  var d=new Date(iso+"T12:00:00");
+  return ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][d.getDay()]+
+    ", "+d.getDate()+" "+
+    ["January","February","March","April","May","June","July","August","September","October","November","December"][d.getMonth()]+
+    ", "+d.getFullYear();
+}
+
+function addDollar(line){
+  return line.replace(/\b(\d{3,})\b/g,function(m,num){
+    return "$"+parseInt(num).toLocaleString();
+  });
+}
+
+function multiLine(text,numbered){
+  if(!text||!text.trim()||text.trim()==="-") return '<span style="color:#bbb">—</span>';
+  var lines=text.split("\n").filter(function(l){return l.trim();});
+  return lines.map(function(l,i){
+    var line=addDollar(l.trim());
+    if(numbered) return '<span class="num">'+(i+1)+'.</span> '+line;
+    return line;
+  }).join("<br>");
+}
+
+// Plain text version for sharing
+function multiLinePlain(text,numbered){
+  if(!text||!text.trim()||text.trim()==="-") return "—";
+  var lines=text.split("\n").filter(function(l){return l.trim();});
+  return lines.map(function(l,i){
+    var line=addDollar(l.trim());
+    if(numbered) return (i+1)+". "+line;
+    return line;
+  }).join("\n");
+}
+
+function upd(){
+  var days=parseInt(v("daysLeft"))||1, elapsed=parseInt(v("elapsed"))||25;
+  var sa=n("sa"),st=n("st")||1,ta=n("ta"),tt=n("tt")||1,na=n("na"),nt=n("nt")||1;
+  var C=["#2176AE","#E07A30","#2E9E6A"];
+  var cards=[
+    {l:"TOTAL SALES",   val:money(sa),p:pct(sa,st),g:money(Math.max(0,st-sa))+" to go"},
+    {l:"AVG TICKET",    val:money(ta),p:pct(ta,tt),g:money(Math.max(0,tt-ta))+" below target"},
+    {l:"NET TICKET",    val:String(Math.round(na)),p:pct(na,nt),g:Math.round(Math.max(0,nt-na))+" to go"}
+  ];
+  var el=document.getElementById("prevCards");
+  if(!el) return;
+  el.innerHTML=cards.map(function(c,i){
+    var s=getStatus(c.p,days,elapsed);
+    return '<div class="pc" style="border-left:3px solid '+C[i]+';padding:10px">'
+      +'<div style="font-size:8px;letter-spacing:2px;color:#888;text-transform:uppercase;margin-bottom:2px">'+c.l+'</div>'
+      +'<div style="font-family:var(--serif);font-size:18px;font-weight:700;color:'+C[i]+'">'+c.val+'</div>'
+      +'<div style="height:3px;background:#eee;margin:4px 0;overflow:hidden"><div style="height:100%;width:'+c.p+'%;background:'+C[i]+'"></div></div>'
+      +'<div style="font-size:9px;font-weight:700;color:'+C[i]+'">'+c.p+'% <span style="color:#bbb;font-weight:400">exp '+s.exp+'%</span></div>'
+      +'<div style="font-size:9px;color:#555;margin-top:2px">'+c.g+'</div>'
+      +'<div style="margin-top:4px;font-size:7px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:2px 6px;display:inline-block;background:'+s.bg+';color:'+s.col+'">'+s.txt+'</div>'
+      +'</div>';
+  }).join("");
+}
+
+function showForm(){
+  document.getElementById("formView").style.display="block";
+  document.getElementById("reportView").style.display="none";
+}
+
+// ── Build report text for sharing ────────────────────
+function buildShareText(){
+  var days=parseInt(v("daysLeft"))||1, elapsed=parseInt(v("elapsed"))||25;
+  var sa=n("sa"),st=n("st")||1,ta=n("ta"),tt=n("tt")||1,na=n("na"),nt=n("nt")||1;
+  var sGap=Math.max(0,st-sa),tGap=Math.max(0,tt-ta),nGap=Math.max(0,nt-na);
+  var daily=Math.max(0,sGap/days);
+  var sp=pct(sa,st),tp=pct(ta,tt),np=pct(na,nt);
+  var iso=v("todayDate"), dateLong=fmtDateLong(iso);
+  var manager=v("manager");
+  var s1=getStatus(sp,days,elapsed), s2=getStatus(tp,days,elapsed), s3=getStatus(np,days,elapsed);
+  var srRaw=n("salesResult");
+  var salesLine=srRaw>0?money(srRaw):money(sa)+" ("+sp+"% to target)";
+
+  var t="*GUCCI RODEO DRIVE — G MORNING BRIEFING*\n";
+  t+=dateLong+(manager?" | "+manager:"")+"\n\n";
+  t+="*WHERE WE STAND*\n";
+  t+="Total Sales: "+money(sa)+" / "+money(st)+" ("+sp+"%) → "+s1.txt+"\n";
+  t+="Avg Ticket: "+money(ta)+" / "+money(tt)+" ("+tp+"%) → "+s2.txt+"\n";
+  t+="Net Ticket: "+Math.round(na)+" / "+Math.round(nt)+" ("+np+"%) → "+s3.txt+"\n\n";
+  t+="*G MORNING BRIEFING*\n";
+  t+="Sales Yesterday: "+salesLine+"\n";
+  if(v("topDept")) t+="Top Dept: "+v("topDept")+"\n";
+  if(v("topPerformers")) t+="Top Performers:\n"+multiLinePlain(v("topPerformers"),true)+"\n";
+  if(v("todayFocus")) t+="Focus Today:\n"+multiLinePlain(v("todayFocus"),false)+"\n";
+  if(v("appts")) t+="Appointments:\n"+multiLinePlain(v("appts"),true)+"\n";
+  if(v("training")) t+="Guccipedia: "+v("training")+"\n";
+  if(v("luceNews")) t+="Luce News: "+v("luceNews")+"\n";
+  t+="\n*DAILY TARGETS*\n";
+  var perCA=Math.max(0,daily/parseInt(v("cas")||1));
+  t+="Sales/CA: "+money(perCA)+" | Avg Ticket: "+money(tt)+" | Net Tickets: "+Math.ceil(Math.max(0,nGap/days/parseInt(v("cas")||1)))+"/CA\n";
+  return t;
+}
+
+function generate(){
+  var days=parseInt(v("daysLeft"))||1, elapsed=parseInt(v("elapsed"))||25;
+  var cas=parseInt(v("cas"))||1;
+  var iso=v("todayDate"), dateStr=fmtDate(iso), dateLong=fmtDateLong(iso);
+  var manager=v("manager");
+  var sa=n("sa"),st=n("st")||1,ta=n("ta"),tt=n("tt")||1,na=n("na"),nt=n("nt")||1;
+  var sGap=Math.max(0,st-sa),tGap=Math.max(0,tt-ta),nGap=Math.max(0,nt-na);
+  var daily=Math.max(0,sGap/days),perCA=Math.max(0,daily/cas),nPerCA=Math.ceil(Math.max(0,nGap/days/cas));
+  var sp=pct(sa,st),tp=pct(ta,tt),np=pct(na,nt);
+  var srRaw=n("salesResult");
+  var salesLine=srRaw>0?money(srRaw):money(sa);
+  var BLUE="#2176AE",ORANGE="#E07A30",GREEN="#2E9E6A",PURPLE="#8B5CF6";
+
+  function kpi(ac,label,val,tgtVal,p,gap,dly){
+    var s=getStatus(p,days,elapsed);
+    return '<div class="kpi-item">'
+      +'<div class="kpi-color" style="background:'+ac+'"></div>'
+      +'<div class="kpi-info"><div class="kpi-lbl">'+label+'</div><div class="kpi-val">'+val+'</div>'
+      +'<div class="kpi-gap" style="color:'+ac+'">'+gap+'</div></div>'
+      +'<div class="kpi-right">'
+      +'<div class="kpi-pct" style="color:'+ac+'">'+p+'%</div>'
+      +'<div class="kpi-exp">Target: '+tgtVal+'</div>'
+      +'<div class="kpi-exp">Expected: '+s.exp+'%</div>'
+      +'<div class="kpi-badge" style="background:'+s.bg+';color:'+s.col+'">'+s.txt+'</div>'
+      +'</div></div>';
+  }
+
+  function ovRow(label,val){
+    return '<div class="ov-row"><div class="ov-lbl">'+label+'</div><div class="ov-val">'+val+'</div></div>';
+  }
+
+  function dtItem(ac,label,val,sub,note){
+    return '<div class="dt-item">'
+      +'<div class="dt-bar" style="background:'+ac+'"></div>'
+      +'<div class="dt-lbl">'+label+'</div>'
+      +'<div class="dt-val">'+val+'</div>'
+      +'<div class="dt-sub">'+sub+'</div>'
+      +'<div class="dt-note">'+note+'</div>'
+      +'</div>';
+  }
+
+  var html='';
+
+  // Section 1: header + KPIs
+  html+='<div class="r-section">'
+    +'<div class="r-section-hdr" style="display:flex;justify-content:space-between;align-items:flex-start">'
+    +'<div><div class="r-eyebrow">Gucci — G Morning Briefing</div>'
+    +'<div class="r-date">'+dateLong+'</div></div>'
+    +(manager?'<div class="r-mgr">'+manager+'</div>':'')
+    +'</div>'
+    +'<div style="padding:8px 16px 4px;border-bottom:1px solid var(--border)">'
+    +'<div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-bottom:6px">KPI STATUS</div></div>'
+    +'<div class="kpi-row">'
+    +kpi(BLUE,"TOTAL SALES",money(sa),money(st),sp,money(sGap)+" to go","")
+    +kpi(ORANGE,"AVERAGE TICKET",money(ta),money(tt),tp,money(tGap)+" below target","")
+    +kpi(GREEN,"NET TICKET",Math.round(na).toLocaleString(),Math.round(nt),np,Math.round(nGap)+" to go","")
+    +'</div></div>';
+
+  // Section 2: overview
+  html+='<div class="r-section"><div class="ov-grid">'
+    +ovRow("SALES RESULT (YESTERDAY)", salesLine)
+    +ovRow("TOP DEPARTMENT", v("topDept")||'<span style="color:#bbb">—</span>')
+    +ovRow("TOP PERFORMERS", multiLine(v("topPerformers"),true))
+    +ovRow("FOCUS TODAY", multiLine(v("todayFocus"),false))
+    +ovRow("SUCCESSFUL APPOINTMENTS", multiLine(v("appts"),true))
+    +ovRow("GUCCIPEDIA", v("training")||'<span style="color:#bbb">—</span>')
+    +ovRow("LUCE NEWS", v("luceNews")||'<span style="color:#bbb">—</span>')
+    +'</div></div>';
+
+  // Section 3: daily targets
+  html+='<div class="r-section"><div style="padding:10px 16px 6px;border-bottom:1px solid var(--border)">'
+    +'<div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--gray)">DAILY TARGETS — '+cas+' CAs on floor</div>'
+    +'</div><div class="dt-grid">'
+    +dtItem(BLUE,"SALES / CA",money(perCA),"per CA today","Store daily: "+money(daily))
+    +dtItem(ORANGE,"AVG TICKET",money(tt),"per transaction","Current: "+money(ta)+" — Gap: "+money(tGap))
+    +dtItem(GREEN,"NET TICKETS",String(nPerCA),"min per CA","Store daily: "+Math.ceil(nGap/days)+" tickets")
+    +dtItem(PURPLE,"CROSS-SELL","15%","multi-category","Current: 13.8% — Push 2nd item")
+    +'</div></div>';
+
+  document.getElementById("rpages").innerHTML=html;
+  document.getElementById("formView").style.display="none";
+  document.getElementById("reportView").style.display="block";
+  window.scrollTo(0,0);
+}
+
+// ── Share functions ───────────────────────────────────
+function openShare(){
+  // Try native share first (iOS/Android)
+  if(navigator.share){
+    var txt=buildShareText();
+    navigator.share({title:"Gucci G Morning Briefing",text:txt})
+      .catch(function(){});
+    return;
+  }
+  document.getElementById("shareModal").classList.add("open");
+}
+
+function closeShare(e){
+  if(!e||e.target===document.getElementById("shareModal")){
+    document.getElementById("shareModal").classList.remove("open");
+  }
+}
+
+function shareWA(){
+  closeShare();
+  var txt=encodeURIComponent(buildShareText());
+  window.open("https://wa.me/?text="+txt,"_blank");
+}
+
+function shareEmail(){
+  closeShare();
+  var txt=buildShareText();
+  var subject=encodeURIComponent("Gucci G Morning Briefing — "+fmtDate(v("todayDate")));
+  var body=encodeURIComponent(txt);
+  window.location.href="mailto:?subject="+subject+"&body="+body;
+}
+
+function sharePDF(){
+  closeShare();
+  setTimeout(function(){window.print();},300);
+}
+
+function shareNative(){
+  closeShare();
+  if(navigator.share){
+    navigator.share({title:"Gucci G Morning Briefing",text:buildShareText()});
+  } else {
+    var txt=buildShareText();
+    navigator.clipboard.writeText(txt).then(function(){
+      alert("Report copied to clipboard!");
+    }).catch(function(){
+      alert("Use the WhatsApp or Email buttons to share.");
+    });
+  }
+}
+</script>
+
+<style>
+@media print{
+  #formView,#reportView .rbar,#shareModal{display:none!important}
+  #reportView{display:block!important}
+  .rpages{padding:0}
+  .r-section{break-inside:avoid;margin-bottom:12px}
+  body{background:white}
+  .kpi-row{flex-direction:row}
+  .kpi-color{width:100%;height:4px}
+  .dt-grid{grid-template-columns:repeat(4,1fr)}
+}
+</style>
+</body>
+</html>
