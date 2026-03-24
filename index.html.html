@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G Morning Briefing</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ─── TOKENS ──────────────────────────────────────── */
+:root{
+  --ink:#0D0D0D;
+  --paper:#FAF9F7;
+  --card:#FFFFFF;
+  --line:#E8E4DC;
+  --muted:#9B9590;
+  --deep:#1A1814;
+  --gold:#B8995A;
+  --gold-pale:#F5EDD8;
+  --blue:#1E4976;
+  --blue-pale:#E8EFF7;
+  --ember:#9B6B2A;
+  --ember-pale:#F5EFE3;
+  --sage:#2A5C45;
+  --sage-pale:#E8F2EC;
+  --serif:'Montserrat',sans-serif;
+  --sans:'DM Sans','Helvetica Neue',sans-serif;
+  --r:6px;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.08);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);background:var(--paper);color:var(--ink);
+  min-height:100vh;-webkit-font-smoothing:antialiased;
+}
+
+/* ─── ANIMATIONS ──────────────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.fade-up{animation:fadeUp .4s ease both}
+.fade-up-1{animation-delay:.05s}
+.fade-up-2{animation-delay:.10s}
+.fade-up-3{animation-delay:.15s}
+.fade-up-4{animation-delay:.20s}
+.fade-up-5{animation-delay:.25s}
+
+/* ─── FORM VIEW ───────────────────────────────────── */
+#formView{max-width:680px;margin:0 auto;padding:32px 20px 120px}
+
+.brand-header{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:36px;padding-bottom:20px;
+  border-bottom:1px solid var(--line);
+}
+.brand-mark{
+  width:36px;height:36px;background:var(--ink);border-radius:3px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-size:18px;color:#fff;font-weight:600;
+  letter-spacing:0;flex-shrink:0;
+}
+.brand-name{font-family:var(--serif);font-size:18px;font-weight:400;letter-spacing:.5px}
+.brand-sub{font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:1px}
+
+.section-eyebrow{
+  font-size:9px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--muted);font-weight:500;margin-bottom:16px;
+  display:flex;align-items:center;gap:8px;
+}
+.section-eyebrow::after{content:'';flex:1;height:1px;background:var(--line)}
+
+.field-card{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r);padding:20px;margin-bottom:10px;
+  box-shadow:var(--shadow);
+}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px}
+
+.f label{
+  display:block;font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:6px;font-weight:500;
+}
+.f input,.f textarea{
+  width:100%;font-size:15px;font-family:var(--serif);font-weight:300;
+  color:var(--ink);background:transparent;border:none;
+  border-bottom:1px solid var(--line);padding:6px 0;
+  outline:none;resize:none;transition:border-color .2s;
+  -webkit-appearance:none;
+}
+.f input:focus,.f textarea:focus{border-bottom-color:var(--ink)}
+.f input::placeholder,.f textarea::placeholder{color:#CCC9C3;font-style:italic}
+
+.kpi-trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+.kpi-card{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);
+}
+.kpi-accent{height:3px}
+.kpi-inner{padding:14px}
+.kpi-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.kpi-inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* Live preview */
+.preview-wrap{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r);padding:18px;margin-bottom:10px;
+  box-shadow:var(--shadow);
+}
+.preview-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.preview-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pkpi{padding:12px;border-left:2px solid var(--line);transition:border-color .3s}
+.pkpi-name{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.pkpi-val{font-family:var(--serif);font-size:22px;font-weight:300;margin-bottom:6px;line-height:1}
+.pkpi-track{height:2px;background:var(--line);margin-bottom:5px;overflow:hidden;border-radius:1px}
+.pkpi-fill{height:100%;border-radius:1px;transition:width .5s ease}
+.pkpi-row{display:flex;justify-content:space-between;align-items:center}
+.pkpi-pct{font-size:10px;font-weight:500}
+.pkpi-status{font-size:7px;letter-spacing:1px;text-transform:uppercase;padding:2px 6px;font-weight:500;border-radius:2px}
+
+.divider{height:1px;background:var(--line);margin:20px 0 16px}
+
+/* Briefing fields */
+.content-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+
+.gen-btn-wrap{
+  position:fixed;bottom:0;left:0;right:0;
+  padding:12px 20px 24px;
+  background:linear-gradient(to top,var(--paper) 70%,transparent);
+  z-index:50;
+}
+.gen-btn{
+  display:block;width:100%;max-width:680px;margin:0 auto;
+  padding:18px 24px;
+  background:var(--ink);color:var(--paper);
+  font-family:var(--sans);font-size:11px;font-weight:500;
+  letter-spacing:3px;text-transform:uppercase;
+  border:none;cursor:pointer;border-radius:var(--r);
+  transition:background .2s,transform .1s;
+  -webkit-tap-highlight-color:transparent;
+  box-shadow:0 4px 20px rgba(0,0,0,.2);
+}
+.gen-btn:active{transform:scale(.99);background:#333}
+.foot-note{
+  text-align:center;margin-top:8px;
+  font-size:10px;color:var(--muted);line-height:1.6;
+  max-width:680px;margin-left:auto;margin-right:auto;
+}
+
+/* ─── REPORT VIEW ─────────────────────────────────── */
+#reportView{display:none;background:var(--paper);min-height:100vh}
+
+.rbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(250,249,247,.92);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+  padding:12px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.rbar-left{display:flex;align-items:center;gap:10px}
+.rbar-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite}
+.rbar-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.rbar-btns{display:flex;gap:8px}
+.rbtn{
+  padding:8px 16px;font-size:9px;font-weight:500;letter-spacing:2px;
+  text-transform:uppercase;border-radius:20px;cursor:pointer;
+  font-family:var(--sans);transition:all .2s;
+  -webkit-tap-highlight-color:transparent;
+}
+.rbtn-back{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.rbtn-back:hover{border-color:var(--ink);color:var(--ink)}
+.rbtn-share{background:var(--ink);color:var(--paper);border:1px solid var(--ink)}
+
+.rpages{
+  max-width:720px;margin:0 auto;
+  padding:24px 20px 60px;
+  display:flex;flex-direction:column;gap:14px;
+}
+
+/* ─── REPORT: Section 0 — Header ─────────────────── */
+.r-masthead{
+  background:var(--deep);color:#fff;
+  border-radius:var(--r);padding:28px;
+  position:relative;overflow:hidden;
+}
+.r-masthead::before{
+  content:'';position:absolute;top:-40px;right:-40px;
+  width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(184,153,90,.15),transparent 70%);
+  pointer-events:none;
+}
+.r-masthead-top{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  margin-bottom:20px;
+}
+.r-masthead-brand{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.r-masthead-date{font-family:var(--serif);font-size:28px;font-weight:300;line-height:1.1;margin-bottom:4px}
+.r-masthead-mgr{font-size:12px;color:rgba(255,255,255,.5);font-style:italic}
+.r-masthead-badge{
+  background:rgba(184,153,90,.15);border:1px solid rgba(184,153,90,.3);
+  border-radius:20px;padding:5px 12px;
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);
+}
+
+/* ─── REPORT: Section 1 — KPIs ───────────────────── */
+.r-kpis{display:flex;flex-direction:column;gap:0;overflow:hidden;border-radius:var(--r);border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow)}
+.r-kpi{
+  padding:20px 24px;border-bottom:1px solid var(--line);
+  display:grid;grid-template-columns:3fr 2fr;gap:16px;align-items:center;
+}
+.r-kpi:last-child{border-bottom:none}
+.r-kpi-left{}
+.r-kpi-tag{font-size:8px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.r-kpi-tag-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.r-kpi-number{font-family:var(--serif);font-size:40px;font-weight:300;line-height:1;margin-bottom:8px}
+.r-kpi-track{height:2px;background:var(--line);border-radius:1px;overflow:hidden;margin-bottom:6px}
+.r-kpi-fill{height:100%;border-radius:1px;transition:width .6s ease}
+.r-kpi-sub{font-size:10px;color:var(--muted)}
+.r-kpi-right{text-align:right}
+.r-kpi-pct{font-size:28px;font-family:var(--serif);font-weight:300;margin-bottom:4px}
+.r-kpi-exp{font-size:9px;color:var(--muted);margin-bottom:8px}
+.r-kpi-badge{
+  display:inline-block;font-size:7.5px;font-weight:500;
+  letter-spacing:1.5px;text-transform:uppercase;
+  padding:4px 10px;border-radius:20px;
+}
+
+/* ─── REPORT: Section 2 — Overview ───────────────── */
+.r-overview{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
+.r-ov-header{padding:14px 24px;border-bottom:2px solid var(--ink);display:flex;align-items:center;justify-content:space-between}
+.r-ov-title{font-family:var(--serif);font-size:16px;font-weight:400;letter-spacing:.5px}
+.r-ov-date{font-size:9px;color:var(--muted);letter-spacing:1px}
+.r-ov-rows{}
+.r-ov-row{
+  display:grid;grid-template-columns:140px 1fr;
+  border-bottom:1px solid var(--line);
+}
+.r-ov-row:last-child{border-bottom:none}
+.r-ov-label{
+  padding:12px 16px;background:var(--paper);
+  font-size:8px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);border-right:1px solid var(--line);
+  display:flex;align-items:flex-start;padding-top:14px;
+}
+.r-ov-val{
+  padding:12px 16px;font-size:12px;color:var(--ink);
+  line-height:1.7;font-family:var(--serif);font-weight:300;font-size:14px;
+}
+.r-ov-val .ranked-item{display:block}
+.r-ov-val .rank-num{color:var(--muted);font-family:var(--sans);font-size:10px;margin-right:6px;font-weight:500}
+.r-ov-val .dash{color:var(--muted)}
+
+/* ─── REPORT: Section 3 — Targets ────────────────── */
+.r-targets{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
+.r-targets-header{
+  padding:14px 24px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--paper);
+}
+.r-targets-title{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted)}
+.r-targets-sub{font-size:11px;color:var(--ink);font-family:var(--serif)}
+.r-targets-grid{display:grid;grid-template-columns:repeat(4,1fr)}
+.r-target{
+  padding:18px 16px;border-right:1px solid var(--line);
+  position:relative;
+}
+.r-target:last-child{border-right:none}
+.r-target-accent{height:2px;width:100%;position:absolute;top:0;left:0}
+.r-target-lbl{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;margin-top:6px}
+.r-target-val{font-family:var(--serif);font-size:24px;font-weight:300;line-height:1;margin-bottom:4px}
+.r-target-sub{font-size:9px;color:var(--muted);margin-bottom:6px}
+.r-target-note{font-size:8px;color:var(--muted);font-style:italic;line-height:1.5}
+
+/* ─── SHARE SHEET ─────────────────────────────────── */
+#shareModal{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.5);backdrop-filter:blur(4px);
+  z-index:200;align-items:flex-end;justify-content:center;
+}
+#shareModal.open{display:flex}
+.share-sheet{
+  background:var(--card);border-radius:16px 16px 0 0;
+  padding:20px 20px 40px;width:100%;max-width:480px;
+  animation:fadeUp .3s ease;
+}
+.share-handle{width:36px;height:4px;background:var(--line);border-radius:2px;margin:0 auto 20px}
+.share-title{font-family:var(--serif);font-size:20px;font-weight:300;margin-bottom:4px}
+.share-sub{font-size:12px;color:var(--muted);margin-bottom:24px}
+.share-opts{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.share-opt{
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;
+}
+.share-opt:active .share-icon-wrap{transform:scale(.93)}
+.share-icon-wrap{
+  width:54px;height:54px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;transition:transform .15s;
+}
+.share-opt-label{font-size:10px;color:var(--muted);text-align:center}
+.share-cancel{
+  width:100%;padding:14px;background:var(--paper);
+  border:1px solid var(--line);border-radius:var(--r);
+  font-size:13px;font-weight:500;cursor:pointer;
+  font-family:var(--sans);color:var(--muted);
+}
+
+/* ─── RESPONSIVE ──────────────────────────────────── */
+@media(max-width:600px){
+  .grid-3,.grid-4{grid-template-columns:1fr 1fr}
+  .kpi-trio{grid-template-columns:1fr}
+  .content-grid{grid-template-columns:1fr}
+  .preview-kpis{grid-template-columns:1fr}
+  .r-kpis{}
+  .r-kpi{grid-template-columns:1fr;gap:8px}
+  .r-kpi-number{font-size:32px}
+  .r-kpi-right{text-align:left;display:flex;align-items:center;gap:12px}
+  .r-kpi-pct{font-size:20px;margin-bottom:0}
+  .r-kpi-exp{margin-bottom:0}
+  .r-ov-row{grid-template-columns:1fr}
+  .r-ov-label{border-right:none;border-bottom:1px solid var(--line);padding:10px 16px}
+  .r-targets-grid{grid-template-columns:1fr 1fr}
+  .r-target{border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .r-target:nth-child(2n){border-right:none}
+  .r-target:nth-last-child(-n+2){border-bottom:none}
+  .rpages{padding:16px 12px 60px}
+  .r-masthead-date{font-size:22px}
+  .rbar-label{display:none}
+}
+
+/* ─── PRINT ───────────────────────────────────────── */
+@media print{
+  #formView,#shareModal,.rbar{display:none!important}
+  #reportView{display:block!important}
+  .rpages{padding:0;max-width:100%}
+  body{background:white}
+  .r-masthead{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ FORM ════════════════════════════════════════════════ -->
+<div id="formView">
+
+  <div class="brand-header fade-up">
+    <div class="brand-mark">G</div>
+    <div>
+      <div class="brand-name">Morning Briefing</div>
+      <div class="brand-sub">Daily Store Report</div>
+    </div>
+  </div>
+
+  <!-- Store info -->
+  <div class="section-eyebrow fade-up fade-up-1"><span style="background:var(--ink);color:#fff;border-radius:50%;width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;font-size:8px;margin-right:4px">1</span>Store & Period</div>
+  <div class="field-card fade-up fade-up-1">
+    <div class="grid-4">
+      <div class="f"><label>Store Name</label><input id="storeName" value="Gucci Rodeo Drive"></div>
+      <div class="f"><label>Period</label><input id="period" value="March 2026"></div>
+      <div class="f"><label>Days Remaining</label><input type="text" inputmode="numeric" id="daysLeft" value="6" oninput="fmt(this);upd()" inputmode="numeric"></div>
+      <div class="f"><label>Days Elapsed</label><input type="text" inputmode="numeric" id="elapsed" value="25" oninput="fmt(this);upd()" inputmode="numeric"></div>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="section-eyebrow fade-up fade-up-2"><span style="background:var(--ink);color:#fff;border-radius:50%;width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;font-size:8px;margin-right:4px">2</span>KPI Targets</div>
+  <div class="kpi-trio fade-up fade-up-2">
+    <div class="kpi-card">
+      <div class="kpi-accent" style="background:var(--blue)"></div>
+      <div class="kpi-inner">
+        <div class="kpi-label">Total Sales</div>
+        <div class="kpi-inputs">
+          <div class="f"><label>Actual ($)</label><input type="text" inputmode="decimal" id="sa" value="2,130,000" oninput="fmt(this);upd()" inputmode="decimal"></div>
+          <div class="f"><label>Target ($)</label><input type="text" inputmode="decimal" id="st" value="2,700,000" oninput="fmt(this);upd()" inputmode="decimal"></div>
+        </div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-accent" style="background:var(--ember)"></div>
+      <div class="kpi-inner">
+        <div class="kpi-label">Average Ticket</div>
+        <div class="kpi-inputs">
+          <div class="f"><label>Actual ($)</label><input type="text" inputmode="decimal" id="ta" value="1,923" oninput="fmt(this);upd()" inputmode="decimal"></div>
+          <div class="f"><label>Target ($)</label><input type="text" inputmode="decimal" id="tt" value="2,251" oninput="fmt(this);upd()" inputmode="decimal"></div>
+        </div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-accent" style="background:var(--sage)"></div>
+      <div class="kpi-inner">
+        <div class="kpi-label">Net Ticket</div>
+        <div class="kpi-inputs">
+          <div class="f"><label>Actual</label><input type="text" inputmode="numeric" id="na" value="1,106" oninput="fmt(this);upd()" inputmode="numeric"></div>
+          <div class="f"><label>Target</label><input type="text" inputmode="numeric" id="nt" value="1,199" oninput="fmt(this);upd()" inputmode="numeric"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Team -->
+  <div class="field-card fade-up fade-up-2">
+    <div class="grid-3">
+      <div class="f"><label>CAs on Floor</label><input type="text" inputmode="numeric" id="cas" value="5" oninput="fmt(this);upd()" inputmode="numeric"></div>
+      <div class="f"><label>Date</label><input type="date" id="todayDate"></div>
+      <div class="f"><label>Manager</label><input id="manager" placeholder="Mehdi Fichot"></div>
+    </div>
+  </div>
+
+  <!-- Live preview -->
+  <div class="preview-wrap fade-up fade-up-3">
+    <div class="preview-label">Live Preview</div>
+    <div class="preview-kpis" id="prevCards"></div>
+  </div>
+
+  <!-- Briefing -->
+  <div class="section-eyebrow fade-up fade-up-3"><span style="background:var(--ink);color:#fff;border-radius:50%;width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;font-size:8px;margin-right:4px">3</span>Briefing Content</div>
+
+  <div class="field-card fade-up fade-up-3">
+    <div style="margin-bottom:18px">
+      <div class="f"><label>Yesterday's Sales ($)</label>
+        <input type="text" inputmode="decimal" id="salesResult" placeholder="e.g. 142,000" oninput="fmt(this)">
+      </div>
+    </div>
+    <div class="f"><label>Top Department</label>
+      <input id="topDept" placeholder="e.g. Handbags 38% of floor — push RTW & Shoes">
+    </div>
+  </div>
+
+  <div class="content-grid fade-up fade-up-4">
+    <div class="field-card">
+      <div class="f"><label>Top 3 Performers</label>
+        <textarea id="topPerformers" rows="4" placeholder="Sophie — 28000&#10;Marc — 22500&#10;Lena — 19800"></textarea>
+      </div>
+    </div>
+    <div class="field-card">
+      <div class="f"><label>Focus Today</label>
+        <textarea id="todayFocus" rows="4" placeholder="Push GG Marmont cross-sell&#10;Client outreach — 5 calls min per CA"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="field-card fade-up fade-up-4">
+    <div class="f"><label>Top 3 Appointments Yesterday</label>
+      <textarea id="appts" rows="3" placeholder="Mrs. Chen — Dionysus — 8500&#10;John D. — Bamboo bag — 4200&#10;Walk-in — Shoes + RTW — 3100"></textarea>
+    </div>
+  </div>
+
+  <div class="content-grid fade-up fade-up-5">
+    <div class="field-card">
+      <div class="f"><label>Guccipedia</label>
+        <input id="training" placeholder="e.g. Flora Gorgeous Gardenia — fragrance">
+      </div>
+    </div>
+    <div class="field-card">
+      <div class="f"><label>Luce News</label>
+        <input id="luceNews" placeholder="e.g. New Bamboo — in store today">
+      </div>
+    </div>
+  </div>
+
+  <div class="gen-btn-wrap fade-up fade-up-5">
+    <button class="gen-btn" onclick="generate()">Generate Briefing →</button>
+    <p class="foot-note">Tap Share to send via WhatsApp or Email</p>
+  </div>
+
+</div>
+
+<!-- ══ REPORT ═══════════════════════════════════════════════ -->
+<div id="reportView">
+  <div class="rbar">
+    <div class="rbar-left">
+      <div class="rbar-dot"></div>
+      <span class="rbar-label">Report Ready</span>
+    </div>
+    <div class="rbar-btns">
+      <button class="rbtn rbtn-back" onclick="showForm()">← Edit</button>
+      <button class="rbtn rbtn-share" onclick="openShare()">Share ↑</button>
+    </div>
+  </div>
+  <div class="rpages" id="rpages"></div>
+  <div style="padding:0 20px 40px;max-width:720px;margin:0 auto">
+    <button onclick="openShare()" style="
+      display:block;width:100%;padding:16px;
+      background:var(--ink);color:var(--paper);
+      font-family:var(--sans);font-size:11px;font-weight:500;
+      letter-spacing:3px;text-transform:uppercase;
+      border:none;cursor:pointer;border-radius:var(--r);
+      -webkit-tap-highlight-color:transparent;
+    ">Share Briefing ↑</button>
+  </div>
+</div>
+
+<!-- ══ SHARE ════════════════════════════════════════════════ -->
+<div id="shareModal" onclick="closeShare(event)">
+  <div class="share-sheet">
+    <div class="share-handle"></div>
+    <div class="share-title">Share Briefing</div>
+    <div class="share-sub">Choose how to send this report to your team</div>
+    <div class="share-opts">
+      <div class="share-opt" onclick="shareWA()">
+        <div class="share-icon-wrap" style="background:#E8F7EE"><span>💬</span></div>
+        <span class="share-opt-label">WhatsApp</span>
+      </div>
+      <div class="share-opt" onclick="shareEmail()">
+        <div class="share-icon-wrap" style="background:#E8EFF7"><span>✉️</span></div>
+        <span class="share-opt-label">Email</span>
+      </div>
+      <div class="share-opt" onclick="sharePDF()">
+        <div class="share-icon-wrap" style="background:#F7EDE8"><span>📄</span></div>
+        <span class="share-opt-label">Save PDF</span>
+      </div>
+      <div class="share-opt" onclick="shareNative()">
+        <div class="share-icon-wrap" style="background:#F5F0E8"><span>⬆️</span></div>
+        <span class="share-opt-label">More</span>
+      </div>
+    </div>
+    <button class="share-cancel" onclick="closeShare()">Cancel</button>
+  </div>
+</div>
+
+<script>
+// ── Init ─────────────────────────────────────────────────
+(function(){
+  var d=new Date();
+  document.getElementById("todayDate").value=d.toISOString().split("T")[0];
+  upd();
+})();
+
+function v(id){var el=document.getElementById(id);return el?el.value:"";}
+function n(id){return parseFloat((v(id)||"").replace(/,/g,""))||0;}
+
+function money(x){
+  if(x>=1000000)return"$"+(x/1000000).toFixed(2)+"M";
+  if(x>=1000)return"$"+Math.round(x).toLocaleString();
+  return"$"+Math.round(x);
+}
+function pct(a,t){return t?Math.min(100,Math.round(a/t*100)):0;}
+
+function getStatus(p,days,elapsed){
+  var total=(elapsed||25)+(days||6);
+  var exp=Math.round((elapsed||25)/total*100);
+  var diff=p-exp;
+  if(p>=100)return{txt:"Target Reached",bg:"var(--sage-pale)",col:"var(--sage)",exp:exp};
+  if(diff>=5) return{txt:"Ahead of Pace", bg:"var(--sage-pale)",col:"var(--sage)",exp:exp};
+  if(diff>=-3)return{txt:"On Pace",       bg:"var(--blue-pale)",col:"var(--blue)",exp:exp};
+  if(diff>=-8)return{txt:"Slightly Behind",bg:"var(--gold-pale)",col:"var(--gold)",exp:exp};
+  if(diff>=-15)return{txt:"Behind Pace",  bg:"var(--gold-pale)",col:"#8B6914",exp:exp};
+  if(diff>=-25)return{txt:"Push Hard",    bg:"var(--ember-pale)",col:"var(--ember)",exp:exp};
+  return          {txt:"Critical",        bg:"var(--ember-pale)",col:"var(--ember)",exp:exp};
+}
+
+function fmtDate(iso){
+  if(!iso)return"Today";
+  var d=new Date(iso+"T12:00:00");
+  return["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][d.getDay()]+" "+d.getDate()+" "+
+    ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][d.getMonth()]+" "+d.getFullYear();
+}
+function fmtDateLong(iso){
+  if(!iso)return"Today";
+  var d=new Date(iso+"T12:00:00");
+  return["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][d.getDay()]+
+    " "+d.getDate()+" "+
+    ["January","February","March","April","May","June","July","August","September","October","November","December"][d.getMonth()]+
+    " "+d.getFullYear();
+}
+function fmtDateLong2(iso){
+  if(!iso)return"Today";
+  var d=new Date(iso+"T12:00:00");
+  return["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][d.getDay()]+", "+
+    d.getDate()+" "+
+    ["January","February","March","April","May","June","July","August","September","October","November","December"][d.getMonth()]+
+    " "+d.getFullYear();
+}
+
+function addDollar(line){
+  return line.replace(/\b(\d{3,})\b/g,function(m,num){return"$"+parseInt(num).toLocaleString();});
+}
+function multiLine(text,numbered){
+  if(!text||!text.trim()||text.trim()==="-")return'<span style="color:var(--muted)">—</span>';
+  var lines=text.split("\n").filter(function(l){return l.trim();});
+  return lines.map(function(l,i){
+    var line=addDollar(l.trim());
+    if(numbered)return'<span class="ranked-item"><span class="rank-num">'+(i+1)+'.</span>'+line+'</span>';
+    return'<span class="ranked-item">'+line+'</span>';
+  }).join("");
+}
+function multiLinePlain(text,numbered){
+  if(!text||!text.trim()||text.trim()==="-")return"—";
+  var lines=text.split("\n").filter(function(l){return l.trim();});
+  return lines.map(function(l,i){
+    var line=addDollar(l.trim());
+    if(numbered)return(i+1)+". "+line;
+    return line;
+  }).join("\n");
+}
+
+// ── Live preview ─────────────────────────────────────────
+function upd(){
+  var days=parseInt((v("daysLeft")||"").replace(/,/g,""))||1,elapsed=parseInt((v("elapsed")||"").replace(/,/g,""))||25;
+  var sa=n("sa"),st=n("st")||1,ta=n("ta"),tt=n("tt")||1,na=n("na"),nt=n("nt")||1;
+  var colors=["var(--blue)","var(--ember)","var(--sage)"];
+  var cards=[
+    {l:"Total Sales",   val:money(sa),p:pct(sa,st),g:money(Math.max(0,st-sa))+" to go"},
+    {l:"Avg Ticket",    val:money(ta),p:pct(ta,tt),g:money(Math.max(0,tt-ta))+" below"},
+    {l:"Net Ticket",    val:String(Math.round(na)),p:pct(na,nt),g:Math.round(Math.max(0,nt-na))+" to go"}
+  ];
+  var el=document.getElementById("prevCards");
+  if(!el)return;
+  el.innerHTML=cards.map(function(c,i){
+    var s=getStatus(c.p,days,elapsed);
+    return'<div class="pkpi" style="border-left-color:'+colors[i]+'">'
+      +'<div class="pkpi-name">'+c.l+'</div>'
+      +'<div class="pkpi-val" style="color:'+colors[i]+'">'+c.val+'</div>'
+      +'<div class="pkpi-track"><div class="pkpi-fill" style="width:'+c.p+'%;background:'+colors[i]+'"></div></div>'
+      +'<div class="pkpi-row">'
+      +'<span class="pkpi-pct" style="color:'+colors[i]+'">'+c.p+'%</span>'
+      +'<span class="pkpi-status" style="background:'+s.bg+';color:'+s.col+'">'+s.txt+'</span>'
+      +'</div>'
+      +'<div style="font-size:9px;color:var(--muted);margin-top:3px">'+c.g+'</div>'
+      +'</div>';
+  }).join("");
+}
+
+function showForm(){
+  document.getElementById("formView").style.display="block";
+  document.getElementById("reportView").style.display="none";
+}
+
+function buildShareText(){
+  var days=parseInt((v("daysLeft")||"").replace(/,/g,""))||1,elapsed=parseInt((v("elapsed")||"").replace(/,/g,""))||25;
+  var sa=n("sa"),st=n("st")||1,ta=n("ta"),tt=n("tt")||1,na=n("na"),nt=n("nt")||1;
+  var sGap=Math.max(0,st-sa),tGap=Math.max(0,tt-ta),nGap=Math.max(0,nt-na);
+  var daily=Math.max(0,sGap/days);
+  var sp=pct(sa,st),tp=pct(ta,tt),np=pct(na,nt);
+  var s1=getStatus(sp,days,elapsed),s2=getStatus(tp,days,elapsed),s3=getStatus(np,days,elapsed);
+  var srRaw=n("salesResult");
+  var salesLine=srRaw>0?money(srRaw):money(sa)+" ("+sp+"% to target)";
+  var manager=v("manager");
+  var t="*G MORNING BRIEFING — "+v("storeName")+"*\n";
+  t+=fmtDateLong2(v("todayDate"))+(manager?" | "+manager:"")+"\n\n";
+  t+="*KPI STATUS*\n";
+  t+="Sales: "+money(sa)+" / "+money(st)+" ("+sp+"%) → "+s1.txt+"\n";
+  t+="Avg Ticket: "+money(ta)+" / "+money(tt)+" ("+tp+"%) → "+s2.txt+"\n";
+  t+="Net Ticket: "+Math.round(na)+" / "+Math.round(nt)+" ("+np+"%) → "+s3.txt+"\n\n";
+  t+="*BRIEFING*\n";
+  t+="Yesterday: "+salesLine+"\n";
+  if(v("topDept"))t+="Top Dept: "+v("topDept")+"\n";
+  if(v("topPerformers"))t+="Top Performers:\n"+multiLinePlain(v("topPerformers"),true)+"\n";
+  if(v("todayFocus"))t+="Focus:\n"+multiLinePlain(v("todayFocus"),false)+"\n";
+  if(v("appts"))t+="Appointments:\n"+multiLinePlain(v("appts"),true)+"\n";
+  if(v("training"))t+="Guccipedia: "+v("training")+"\n";
+  if(v("luceNews"))t+="Luce News: "+v("luceNews")+"\n";
+  t+="\n*DAILY TARGETS*\n";
+  var cas=parseInt((v("cas")||"1").replace(/,/g,""));
+  var perCA=Math.max(0,daily/cas);
+  var nPerCA=Math.ceil(Math.max(0,Math.max(0,nt-na)/days/cas));
+  t+="Sales/CA: "+money(perCA)+" | Avg Ticket: "+money(tt)+" | Net/CA: "+nPerCA+"\n";
+  return t;
+}
+
+// ── Generate report ──────────────────────────────────────
+function generate(){
+  var days=parseInt((v("daysLeft")||"").replace(/,/g,""))||1,elapsed=parseInt((v("elapsed")||"").replace(/,/g,""))||25;
+  var cas=parseInt(v("cas"))||1;
+  var iso=v("todayDate"),dateStr=fmtDate(iso),dateLong=fmtDateLong(iso),dateLong2=fmtDateLong2(iso);
+  var manager=v("manager"),store=v("storeName")||"Gucci Rodeo Drive";
+  var sa=n("sa"),st=n("st")||1,ta=n("ta"),tt=n("tt")||1,na=n("na"),nt=n("nt")||1;
+  var sGap=Math.max(0,st-sa),tGap=Math.max(0,tt-ta),nGap=Math.max(0,nt-na);
+  var daily=Math.max(0,sGap/days),perCA=Math.max(0,daily/cas);
+  var nPerCA=Math.ceil(Math.max(0,nGap/days/cas));
+  var sp=pct(sa,st),tp=pct(ta,tt),np=pct(na,nt);
+  var srRaw=n("salesResult");
+  var salesLine=srRaw>0?money(srRaw):money(sa);
+  var period=v("period")||"March 2026";
+
+  var s1=getStatus(sp,days,elapsed),s2=getStatus(tp,days,elapsed),s3=getStatus(np,days,elapsed);
+
+  // KPI colors
+  var BLUE="var(--blue)",EMBER="var(--ember)",SAGE="var(--sage)",GOLD="var(--gold)";
+
+  function kpiRow(ac,dotC,label,num,tgt,p,status,gap,dly){
+    return'<div class="r-kpi">'
+      +'<div class="r-kpi-left">'
+      +'<div class="r-kpi-tag"><div class="r-kpi-tag-dot" style="background:'+dotC+'"></div>'+label+'</div>'
+      +'<div class="r-kpi-number" style="color:'+dotC+'">'+num+'</div>'
+      +'<div class="r-kpi-track"><div class="r-kpi-fill" style="width:'+Math.min(100,p)+'%;background:'+dotC+'"></div></div>'
+      +'<div class="r-kpi-sub">'+gap+'</div>'
+      +'</div>'
+      +'<div class="r-kpi-right">'
+      +'<div class="r-kpi-pct" style="color:'+dotC+'">'+p+'%</div>'
+      +'<div class="r-kpi-exp">target '+tgt+' · exp '+status.exp+'%</div>'
+      +'<div class="r-kpi-badge" style="background:'+status.bg+';color:'+status.col+'">'+status.txt+'</div>'
+      +'</div></div>';
+  }
+
+  function ovRow(label,val){
+    return'<div class="r-ov-row"><div class="r-ov-label">'+label+'</div><div class="r-ov-val">'+val+'</div></div>';
+  }
+
+  function tgtCol(ac,label,val,sub,note){
+    return'<div class="r-target">'
+      +'<div class="r-target-accent" style="background:'+ac+'"></div>'
+      +'<div class="r-target-lbl">'+label+'</div>'
+      +'<div class="r-target-val">'+val+'</div>'
+      +'<div class="r-target-sub">'+sub+'</div>'
+      +'<div class="r-target-note">'+note+'</div>'
+      +'</div>';
+  }
+
+  var html='';
+
+  // Masthead
+  html+='<div class="r-masthead">'
+    +'<div class="r-masthead-top">'
+    +'<div><div class="r-masthead-brand">'+store.toUpperCase()+'</div>'
+    +'<div class="r-masthead-date">'+dateLong+'</div>'
+    +(manager?'<div class="r-masthead-mgr">'+manager+'</div>':'')
+    +'</div>'
+    +'<div class="r-masthead-badge">'+days+' days left</div>'
+    +'</div>'
+    +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
+    +'<span style="font-size:10px;color:rgba(255,255,255,.4)">'+period+'</span>'
+    +'<span style="font-size:10px;color:rgba(255,255,255,.2)">·</span>'
+    +'<span style="font-size:10px;color:rgba(255,255,255,.4)">'+dateStr+'</span>'
+    +'</div>'
+    +'</div>';
+
+  // KPIs
+  html+='<div class="r-kpis">'
+    +kpiRow(BLUE,BLUE,"Total Sales",money(sa),money(st),sp,s1,money(sGap)+" to go",money(daily)+" / day")
+    +kpiRow(EMBER,EMBER,"Average Ticket",money(ta),money(tt),tp,s2,money(tGap)+" below target","Add 2nd category each sale")
+    +kpiRow(SAGE,SAGE,"Net Ticket",Math.round(na).toLocaleString(),Math.round(nt),np,s3,Math.round(nGap)+" to go","~"+Math.ceil(nGap/days)+" / day")
+    +'</div>';
+
+  // Overview
+  html+='<div class="r-overview">'
+    +'<div class="r-ov-header"><div class="r-ov-title">Morning Briefing</div><div class="r-ov-date">'+dateLong2+'</div></div>'
+    +'<div class="r-ov-rows">'
+    +ovRow("Yesterday",salesLine)
+    +ovRow("Top Dept",v("topDept")||'<span style="color:var(--muted)">—</span>')
+    +ovRow("Performers",multiLine(v("topPerformers"),true))
+    +ovRow("Focus",multiLine(v("todayFocus"),false))
+    +ovRow("Appointments",multiLine(v("appts"),true))
+    +ovRow("Guccipedia",v("training")||'<span style="color:var(--muted)">—</span>')
+    +ovRow("Luce News",v("luceNews")||'<span style="color:var(--muted)">—</span>')
+    +'</div></div>';
+
+  // Daily targets
+  html+='<div class="r-targets">'
+    +'<div class="r-targets-header">'
+    +'<div class="r-targets-title">Daily Targets</div>'
+    +'<div class="r-targets-sub">'+cas+' CAs on floor today</div>'
+    +'</div>'
+    +'<div class="r-targets-grid">'
+    +tgtCol(BLUE,"Sales / CA",money(perCA),"per CA today","Store: "+money(daily))
+    +tgtCol(EMBER,"Avg Ticket",money(tt),"per transaction",money(ta)+" current · "+money(tGap)+" gap")
+    +tgtCol(SAGE,"Net Tickets",String(nPerCA),"minimum per CA","Store daily: "+Math.ceil(nGap/days))
+    +tgtCol(GOLD,"Cross-Sell","15%","multi-category","13.8% current · push 2nd item")
+    +'</div></div>';
+
+  document.getElementById("rpages").innerHTML=html;
+  document.getElementById("formView").style.display="none";
+  document.getElementById("reportView").style.display="block";
+  window.scrollTo(0,0);
+  // Show success toast
+  showToast("Briefing ready — tap Share to send to your team");
+}
+
+function showToast(msg){
+  var t=document.getElementById("toast");
+  if(!t){
+    t=document.createElement("div");
+    t.id="toast";
+    t.style.cssText="position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--deep);color:#fff;padding:10px 20px;border-radius:20px;font-size:11px;font-family:var(--sans);letter-spacing:1px;opacity:0;transition:all .3s;z-index:300;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.3)";
+    document.body.appendChild(t);
+  }
+  t.textContent=msg;
+  setTimeout(function(){t.style.opacity="1";t.style.transform="translateX(-50%) translateY(0)";},10);
+  setTimeout(function(){t.style.opacity="0";t.style.transform="translateX(-50%) translateY(10px)"},3500);
+}
+
+// ── Share ────────────────────────────────────────────────
+function openShare(){
+  if(navigator.share){
+    navigator.share({title:"G Morning Briefing",text:buildShareText()}).catch(function(){});
+    return;
+  }
+  document.getElementById("shareModal").classList.add("open");
+}
+function closeShare(e){
+  if(!e||e.target===document.getElementById("shareModal"))
+    document.getElementById("shareModal").classList.remove("open");
+}
+function shareWA(){
+  closeShare();
+  var txt=encodeURIComponent(buildShareText());
+  // Try deep link first (opens WhatsApp app on mobile)
+  var isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if(isMobile){
+    window.location.href="whatsapp://send?text="+txt;
+  } else {
+    window.open("https://web.whatsapp.com/send?text="+txt,"_blank");
+  }
+}
+function shareEmail(){
+  closeShare();
+  window.location.href="mailto:?subject="+encodeURIComponent("G Morning Briefing — "+fmtDate(v("todayDate")))+"&body="+encodeURIComponent(buildShareText());
+}
+function sharePDF(){closeShare();setTimeout(function(){window.print();},300);}
+function shareNative(){
+  closeShare();
+  if(navigator.share){navigator.share({title:"G Morning Briefing",text:buildShareText()});}
+  else{navigator.clipboard.writeText(buildShareText()).then(function(){alert("Copied to clipboard!");}).catch(function(){alert("Use the WhatsApp or Email buttons.");});}
+}
+
+// ── Auto-format numbers ─────────────────────────────────
+function fmt(el){
+  var pos=el.selectionStart;
+  var raw=el.value.replace(/[^0-9.]/g,"");
+  // Split on decimal
+  var parts=raw.split(".");
+  // Format integer part with commas
+  parts[0]=parts[0].replace(/\B(?=(\d{3})+(?!\d))/g,",");
+  // Keep at most one decimal point
+  var formatted=parts.length>1?parts[0]+"."+parts[1]:parts[0];
+  var diff=formatted.length-el.value.length;
+  el.value=formatted;
+  // Restore cursor position
+  try{el.setSelectionRange(pos+diff,pos+diff);}catch(e){}
+}
+</script>
+</body>
+</html>
