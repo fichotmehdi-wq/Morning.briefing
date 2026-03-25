@@ -92,7 +92,7 @@ body{
 .f input:focus,.f textarea:focus{border-bottom-color:var(--ink)}
 .f input::placeholder,.f textarea::placeholder{color:#CCC9C3;font-style:italic}
 
-.kpi-trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+.kpi-trio{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 .kpi-card{
   background:var(--card);border:1px solid var(--line);
   border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);
@@ -109,7 +109,7 @@ body{
   box-shadow:var(--shadow);
 }
 .preview-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
-.preview-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.preview-kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .pkpi{padding:12px;border-left:2px solid var(--line);transition:border-color .3s}
 .pkpi-name{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
 .pkpi-val{font-family:var(--serif);font-size:22px;font-weight:300;margin-bottom:6px;line-height:1}
@@ -358,7 +358,7 @@ body{
   <div class="field-card fade-up fade-up-1">
     <div class="grid-4">
       <div class="f"><label>Store Name</label><input id="storeName" value="Gucci Rodeo Drive"></div>
-      <div class="f"><label>Period</label><input id="period" value="March 2026"></div>
+      <div class="f"><label>Period</label><input id="period" value="March 2026" oninput="autoElapsed()"></div>
       <div class="f"><label>Days Remaining</label><input type="text" inputmode="numeric" id="daysLeft" value="6" oninput="fmt(this);upd()" inputmode="numeric"></div>
       <div class="f"><label>Days Elapsed</label><input type="text" inputmode="numeric" id="elapsed" value="25" oninput="fmt(this);upd()" inputmode="numeric"></div>
     </div>
@@ -380,7 +380,7 @@ body{
     <div class="kpi-card">
       <div class="kpi-accent" style="background:var(--ember)"></div>
       <div class="kpi-inner">
-        <div class="kpi-label">Average Ticket</div>
+        <div class="kpi-label">AVT</div>
         <div class="kpi-inputs">
           <div class="f"><label>Actual ($)</label><input type="text" inputmode="decimal" id="ta" value="1,923" oninput="fmt(this);upd()" inputmode="decimal"></div>
           <div class="f"><label>Target ($)</label><input type="text" inputmode="decimal" id="tt" value="2,251" oninput="fmt(this);upd()" inputmode="decimal"></div>
@@ -390,10 +390,20 @@ body{
     <div class="kpi-card">
       <div class="kpi-accent" style="background:var(--sage)"></div>
       <div class="kpi-inner">
-        <div class="kpi-label">Net Ticket</div>
+        <div class="kpi-label">Net Transactions</div>
         <div class="kpi-inputs">
           <div class="f"><label>Actual</label><input type="text" inputmode="numeric" id="na" value="1,106" oninput="fmt(this);upd()" inputmode="numeric"></div>
           <div class="f"><label>Target</label><input type="text" inputmode="numeric" id="nt" value="1,199" oninput="fmt(this);upd()" inputmode="numeric"></div>
+        </div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-accent" style="background:var(--gold)"></div>
+      <div class="kpi-inner">
+        <div class="kpi-label">Conversion Rate</div>
+        <div class="kpi-inputs">
+          <div class="f"><label>Actual (%)</label><input type="text" inputmode="decimal" id="conv" value="13.3" oninput="fmt(this);upd()" inputmode="decimal"></div>
+          <div class="f"><label>Target (%)</label><input type="text" inputmode="decimal" id="convt" value="15" oninput="fmt(this);upd()" inputmode="decimal"></div>
         </div>
       </div>
     </div>
@@ -401,9 +411,10 @@ body{
 
   <!-- Team -->
   <div class="field-card fade-up fade-up-2">
-    <div class="grid-3">
-      <div class="f"><label>CAs on Floor</label><input type="text" inputmode="numeric" id="cas" value="5" oninput="fmt(this);upd()" inputmode="numeric"></div>
-      <div class="f"><label>Date</label><input type="date" id="todayDate"></div>
+    <div class="grid-4">
+      <div class="f"><label>Client Advisors on Floor</label><input type="text" inputmode="numeric" id="cas" value="5" oninput="fmt(this);upd()" inputmode="numeric"></div>
+      <div class="f"><label>Date</label><input type="date" id="todayDate" oninput="autoElapsed()"></div>
+      <div class="f"><label>Cross-Selling %</label><input type="text" id="crossSell" value="13.8" inputmode="decimal" placeholder="e.g. 13.8"></div>
       <div class="f"><label>Manager</label><input id="manager" placeholder="Mehdi Fichot"></div>
     </div>
   </div>
@@ -418,13 +429,16 @@ body{
   <div class="section-eyebrow fade-up fade-up-3"><span style="background:var(--ink);color:#fff;border-radius:50%;width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;font-size:8px;margin-right:4px">3</span>Briefing Content</div>
 
   <div class="field-card fade-up fade-up-3">
-    <div style="margin-bottom:18px">
+    <div class="grid-2" style="margin-bottom:18px">
       <div class="f"><label>Yesterday's Sales ($)</label>
         <input type="text" inputmode="decimal" id="salesResult" placeholder="e.g. 142,000" oninput="fmt(this)">
       </div>
+      <div class="f"><label>Handbags Sold Yesterday</label>
+        <input type="text" inputmode="numeric" id="hbSold" placeholder="e.g. 4" oninput="fmt(this)">
+      </div>
     </div>
-    <div class="f"><label>Top Department</label>
-      <input id="topDept" placeholder="e.g. Handbags 38% of floor — push RTW & Shoes">
+    <div class="f"><label>Top Category</label>
+      <input id="topDept" placeholder="e.g. Handbags 38% of floor — develop RTW & Shoes">
     </div>
   </div>
 
@@ -434,16 +448,17 @@ body{
         <textarea id="topPerformers" rows="4" placeholder="Sophie — 28000&#10;Marc — 22500&#10;Lena — 19800"></textarea>
       </div>
     </div>
-    <div class="field-card">
-      <div class="f"><label>Focus Today</label>
-        <textarea id="todayFocus" rows="4" placeholder="Push GG Marmont cross-sell&#10;Client outreach — 5 calls min per CA"></textarea>
-      </div>
-    </div>
   </div>
 
   <div class="field-card fade-up fade-up-4">
-    <div class="f"><label>Top 3 Appointments Yesterday</label>
-      <textarea id="appts" rows="3" placeholder="Mrs. Chen — Dionysus — 8500&#10;John D. — Bamboo bag — 4200&#10;Walk-in — Shoes + RTW — 3100"></textarea>
+    <div class="f"><label>Successful Appointments</label>
+      <textarea id="appts" rows="3" placeholder="Mrs. Chen — Dionysus — 8500&#10;John D. — Bamboo bag — 4200&#10;Walk-in Client — Shoes + RTW — 3100"></textarea>
+    </div>
+  </div>
+
+  <div class="field-card fade-up fade-up-5">
+    <div class="f"><label>Today's Focus</label>
+      <textarea id="todayFocus" rows="3" placeholder="Develop GG Marmont cross-selling&#10;Client outreach — 5 calls per Client Advisor"></textarea>
     </div>
   </div>
 
@@ -456,6 +471,12 @@ body{
     <div class="field-card">
       <div class="f"><label>Luce News</label>
         <input id="luceNews" placeholder="e.g. New Bamboo — in store today">
+      </div>
+    </div>
+
+    <div class="field-card fade-up fade-up-5">
+      <div class="f"><label>Client Outreach — Clienteling</label>
+        <input id="clienteling" placeholder="e.g. 5 outreach calls per Client Advisor — focus on VIC re-engagement">
       </div>
     </div>
   </div>
@@ -600,16 +621,19 @@ function multiLinePlain(text,numbered){
 function upd(){
   var days=parseInt((v("daysLeft")||"").replace(/,/g,""))||1,elapsed=parseInt((v("elapsed")||"").replace(/,/g,""))||25;
   var sa=n("sa"),st=n("st")||1,ta=n("ta"),tt=n("tt")||1,na=n("na"),nt=n("nt")||1;
-  var colors=["var(--blue)","var(--ember)","var(--sage)"];
+  var conv_u=parseFloat((v("conv")||"13.3").replace(/,/g,""))||13.3;
+  var convt_u=parseFloat((v("convt")||"15").replace(/,/g,""))||15;
+  var colors=["var(--blue)","var(--ember)","var(--sage)","var(--gold)"];
   var cards=[
     {l:"Total Sales",   val:money(sa),p:pct(sa,st),g:money(Math.max(0,st-sa))+" to go"},
-    {l:"Avg Ticket",    val:money(ta),p:pct(ta,tt),g:money(Math.max(0,tt-ta))+" below"},
-    {l:"Net Ticket",    val:String(Math.round(na)),p:pct(na,nt),g:Math.round(Math.max(0,nt-na))+" to go"}
+    {l:"AVT",val:money(ta),p:pct(ta,tt),g:money(Math.max(0,tt-ta))+" below"},
+    {l:"Net Transactions",    val:String(Math.round(na)),p:pct(na,nt),g:Math.round(Math.max(0,nt-na))+" to go"},
+    {l:"Conversion",   val:conv_u+"%",p:pct(conv_u,convt_u),g:(convt_u-conv_u).toFixed(1)+"% below target"}
   ];
   var el=document.getElementById("prevCards");
   if(!el)return;
   el.innerHTML=cards.map(function(c,i){
-    var s=getStatus(c.p,days,elapsed);
+    var s=(i===1)?getStatusDirect(n(i===1?'ta':''),n(i===1?'tt':'')):getStatus(c.p,days,elapsed);
     return'<div class="pkpi" style="border-left-color:'+colors[i]+'">'
       +'<div class="pkpi-name">'+c.l+'</div>'
       +'<div class="pkpi-val" style="color:'+colors[i]+'">'+c.val+'</div>'
@@ -634,7 +658,12 @@ function buildShareText(){
   var sGap=Math.max(0,st-sa),tGap=Math.max(0,tt-ta),nGap=Math.max(0,nt-na);
   var daily=Math.max(0,sGap/days);
   var sp=pct(sa,st),tp=pct(ta,tt),np=pct(na,nt);
-  var s1=getStatus(sp,days,elapsed),s2=getStatus(tp,days,elapsed),s3=getStatus(np,days,elapsed);
+  var actual_cs=parseFloat((v("crossSell")||"13.8").replace(/,/g,""))||13.8;
+  var target_cs=15; // Gucci standard cross-selling target
+  var conv=parseFloat((v("conv")||"13.3").replace(/,/g,""))||13.3;
+  var convt=parseFloat((v("convt")||"15").replace(/,/g,""))||15;
+  var convp=pct(conv,convt);
+  var s1=getStatus(sp,days,elapsed),s2=getStatusDirect(ta,tt),s3=getStatus(np,days,elapsed),s4=getStatusDirect(conv,convt);
   var srRaw=n("salesResult");
   var salesLine=srRaw>0?money(srRaw):money(sa)+" ("+sp+"% to target)";
   var manager=v("manager");
@@ -643,20 +672,24 @@ function buildShareText(){
   t+="*KPI STATUS*\n";
   t+="Sales: "+money(sa)+" / "+money(st)+" ("+sp+"%) → "+s1.txt+"\n";
   t+="Avg Ticket: "+money(ta)+" / "+money(tt)+" ("+tp+"%) → "+s2.txt+"\n";
-  t+="Net Ticket: "+Math.round(na)+" / "+Math.round(nt)+" ("+np+"%) → "+s3.txt+"\n\n";
+  t+="Net Transactions: "+Math.round(na)+" / "+Math.round(nt)+" ("+np+"%) → "+s3.txt+"\n";
+  t+="Conversion: "+conv+"% / "+convt+"% ("+convp+"%) → "+s4.txt+"\n\n";
   t+="*BRIEFING*\n";
   t+="Yesterday: "+salesLine+"\n";
-  if(v("topDept"))t+="Top Dept: "+v("topDept")+"\n";
+  if(v("hbSold"))t+="Handbags Sold: "+v("hbSold")+" units\n";
+  if(v("topDept"))t+="Top Category: "+v("topDept")+"\n";
   if(v("topPerformers"))t+="Top Performers:\n"+multiLinePlain(v("topPerformers"),true)+"\n";
   if(v("todayFocus"))t+="Focus:\n"+multiLinePlain(v("todayFocus"),false)+"\n";
   if(v("appts"))t+="Appointments:\n"+multiLinePlain(v("appts"),true)+"\n";
   if(v("training"))t+="Guccipedia: "+v("training")+"\n";
   if(v("luceNews"))t+="Luce News: "+v("luceNews")+"\n";
+  if(v("clienteling"))t+="Client Outreach: "+v("clienteling")+"\n";
   t+="\n*DAILY TARGETS*\n";
   var cas=parseInt((v("cas")||"1").replace(/,/g,""));
   var perCA=Math.max(0,daily/cas);
   var nPerCA=Math.ceil(Math.max(0,Math.max(0,nt-na)/days/cas));
-  t+="Sales/CA: "+money(perCA)+" | Avg Ticket: "+money(tt)+" | Net/CA: "+nPerCA+"\n";
+  var cs_val=parseFloat((v("crossSell")||"13.8").replace(/,/g,""))||13.8;
+  t+="Sales/CA: "+money(perCA)+" | Avg Ticket: "+money(tt)+" | Net/CA: "+nPerCA+" | Cross-sell: "+cs_val+"%\n";
   return t;
 }
 
@@ -675,7 +708,12 @@ function generate(){
   var salesLine=srRaw>0?money(srRaw):money(sa);
   var period=v("period")||"March 2026";
 
-  var s1=getStatus(sp,days,elapsed),s2=getStatus(tp,days,elapsed),s3=getStatus(np,days,elapsed);
+  var conv=parseFloat((v("conv")||"13.3").replace(/,/g,""))||13.3;
+  var convt=parseFloat((v("convt")||"15").replace(/,/g,""))||15;
+  var convp=pct(conv,convt);
+  var actual_cs=parseFloat((v("crossSell")||"13.8").replace(/,/g,""))||13.8;
+  var target_cs=15;
+  var s1=getStatus(sp,days,elapsed),s2=getStatusDirect(ta,tt),s3=getStatus(np,days,elapsed),s4=getStatusDirect(conv,convt);
 
   // KPI colors
   var BLUE="var(--blue)",EMBER="var(--ember)",SAGE="var(--sage)",GOLD="var(--gold)";
@@ -730,21 +768,24 @@ function generate(){
   // KPIs
   html+='<div class="r-kpis">'
     +kpiRow(BLUE,BLUE,"Total Sales",money(sa),money(st),sp,s1,money(sGap)+" to go",money(daily)+" / day")
-    +kpiRow(EMBER,EMBER,"Average Ticket",money(ta),money(tt),tp,s2,money(tGap)+" below target","Add 2nd category each sale")
-    +kpiRow(SAGE,SAGE,"Net Ticket",Math.round(na).toLocaleString(),Math.round(nt),np,s3,Math.round(nGap)+" to go","~"+Math.ceil(nGap/days)+" / day")
+    +kpiRow(EMBER,EMBER,"AVT",money(ta),money(tt),tp,s2,money(tGap)+" below target","Add 2nd category each sale")
+    +kpiRow(SAGE,SAGE,"Net Transactions",Math.round(na).toLocaleString(),Math.round(nt),np,s3,Math.round(nGap)+" to go","~"+Math.ceil(nGap/days)+" / day")
+    +kpiRow(GOLD,GOLD,"Conversion Rate",conv+"%",convt+"%",convp,s4,(convt-conv).toFixed(1)+"% below target","")
     +'</div>';
 
   // Overview
   html+='<div class="r-overview">'
     +'<div class="r-ov-header"><div class="r-ov-title">Morning Briefing</div><div class="r-ov-date">'+dateLong2+'</div></div>'
     +'<div class="r-ov-rows">'
-    +ovRow("Yesterday",salesLine)
-    +ovRow("Top Dept",v("topDept")||'<span style="color:var(--muted)">—</span>')
-    +ovRow("Performers",multiLine(v("topPerformers"),true))
-    +ovRow("Focus",multiLine(v("todayFocus"),false))
-    +ovRow("Appointments",multiLine(v("appts"),true))
+    +ovRow("Yesterday's Sales",salesLine)
+    +ovRow("Handbags Sold",v("hbSold")?v("hbSold")+" units sold yesterday":'<span style="color:var(--muted)">—</span>')
+    +ovRow("Top Category",v("topDept")||'<span style="color:var(--muted)">—</span>')
+    +ovRow("Top Performers",multiLine(v("topPerformers"),true))
+    +ovRow("Successful Appointments",multiLine(v("appts"),true))
+    +ovRow("Today's Focus",multiLine(v("todayFocus"),false))
     +ovRow("Guccipedia",v("training")||'<span style="color:var(--muted)">—</span>')
     +ovRow("Luce News",v("luceNews")||'<span style="color:var(--muted)">—</span>')
+    +ovRow("Client Outreach",v("clienteling")||'<span style="color:var(--muted)">—</span>')
     +'</div></div>';
 
   // Daily targets
@@ -754,10 +795,10 @@ function generate(){
     +'<div class="r-targets-sub">'+cas+' CAs on floor today</div>'
     +'</div>'
     +'<div class="r-targets-grid">'
-    +tgtCol(BLUE,"Sales / CA",money(perCA),"per CA today","Store: "+money(daily))
-    +tgtCol(EMBER,"Avg Ticket",money(tt),"per transaction",money(ta)+" current · "+money(tGap)+" gap")
-    +tgtCol(SAGE,"Net Tickets",String(nPerCA),"minimum per CA","Store daily: "+Math.ceil(nGap/days))
-    +tgtCol(GOLD,"Cross-Sell","15%","multi-category","13.8% current · push 2nd item")
+    +tgtCol(BLUE,"Sales per CA",money(perCA),"per Client Advisor","Store daily: "+money(daily))
+    +tgtCol(EMBER,"AVT",money(tt),"per transaction",money(ta)+" current · target "+money(tt)+")")
+    +tgtCol(SAGE,"Net Transactions",String(nPerCA),"min. per Client Advisor","Store target: "+Math.ceil(nGap/days))
+    +tgtCol(GOLD,"Cross-Selling",target_cs+"%","cross-selling",actual_cs+"% current · target 15%")
     +'</div></div>';
 
   document.getElementById("rpages").innerHTML=html;
@@ -830,6 +871,46 @@ function fmt(el){
   // Restore cursor position
   try{el.setSelectionRange(pos+diff,pos+diff);}catch(e){}
 }
+
+// ── Auto-calculate days elapsed from date ────────────────────────────────
+function autoElapsed(){
+  var iso = v("todayDate");
+  var period = v("period");
+  if(!iso || !period) return;
+  var d = new Date(iso+"T12:00:00");
+  var months = {january:1,february:2,march:3,april:4,may:5,june:6,
+    july:7,august:8,september:9,october:10,november:11,december:12};
+  var parts = period.toLowerCase().split(" ");
+  var monthNum = null, year = null;
+  parts.forEach(function(p){
+    if(months[p]) monthNum = months[p];
+    if(/^20dd$/.test(p)) year = parseInt(p);
+  });
+  if(!monthNum || !year) return;
+  // Days in that month
+  var totalDays = new Date(year, monthNum, 0).getDate();
+  var dayOfMonth = d.getDate();
+  var elapsed = Math.min(dayOfMonth, totalDays);
+  var remaining = Math.max(0, totalDays - dayOfMonth);
+  // Update fields
+  document.getElementById("elapsed").value = String(elapsed);
+  document.getElementById("daysLeft").value = String(remaining);
+  upd();
+}
+
+// ── Direct status (for non-cumulative KPIs like AVT) ──────────────────────
+function getStatusDirect(actual, target){
+  if(!target) return {txt:"—", bg:"var(--line)", col:"var(--muted)", exp:100};
+  var p = Math.round(actual / target * 100);
+  var diff = actual - target;
+  var pct_diff = Math.round((actual - target) / target * 100);
+  if(actual >= target)   return {txt:"On Target",      bg:"var(--sage-pale)",  col:"var(--sage)",  exp:100};
+  if(pct_diff >= -3)     return {txt:"Near Target",    bg:"var(--blue-pale)",  col:"var(--blue)",  exp:100};
+  if(pct_diff >= -8)     return {txt:"Below Target",   bg:"var(--gold-pale)",  col:"var(--gold)",  exp:100};
+  if(pct_diff >= -15)    return {txt:"Well Below",     bg:"var(--ember-pale)", col:"var(--ember)", exp:100};
+  return                        {txt:"Critical Gap",   bg:"var(--ember-pale)", col:"var(--ember)", exp:100};
+}
 </script>
 </body>
 </html>
+
